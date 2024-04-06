@@ -33,8 +33,8 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     SaveMethods();
     //error msg
     DWORD ExcCode = pExceptInfo->ExceptionRecord->ExceptionCode;
-    if (ExcCode == LastExcCode) return EXCEPTION_EXECUTE_HANDLER;
-    else LastExcCode = ExcCode;
+    if (ExcCode != EXCEPTION_NONCONTINUABLE_EXCEPTION) return EXCEPTION_CONTINUE_EXECUTION;
+    LastExcCode = ExcCode;
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
