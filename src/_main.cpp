@@ -32,13 +32,9 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     DWORD ExcCode = pExceptInfo->ExceptionRecord->ExceptionCode;
     std::string sExcCode = (std::stringstream() << "0x" << std::hex << ExcCode).str();
     log::error("{} with {}", __FUNCTION__, sExcCode);
-    //error msg
-    if (ExcCode == EXCEPTION_NONCONTINUABLE_EXCEPTION) {
-        MessageBox(0, fmt::format("{}", sExcCode).data(), "EXCEPTION_NONCONTINUABLE_EXCEPTION", 0);
-        }
     //save game
     SaveMethods();
-    if (ExcCode != EXCEPTION_NONCONTINUABLE_EXCEPTION) return EXCEPTION_CONTINUE_EXECUTION;
+    if (ExcCode == 0xc0000005) return EXCEPTION_EXECUTE_HANDLER;//a
     LastExcCode = ExcCode;
     return EXCEPTION_CONTINUE_SEARCH;
 }
