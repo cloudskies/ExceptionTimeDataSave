@@ -5,13 +5,9 @@ void SaveMethods() {
     //save game?
     AppDelegate::sharedApplication()->trySaveGame();
 	//save log why no
-    log::info("Game saved");
+    log::info("Game saved via trySaveGame()");
     //level editor tries
     if (LevelEditorLayer* LevelEditorLayer_ = GameManager::sharedState()->getEditorLayer()) {
-        LevelEditorLayer_->m_editorUI->undoLastAction(CCNode::create());
-        LevelEditorLayer_->m_editorUI->undoLastAction(CCNode::create());
-        LevelEditorLayer_->m_editorUI->undoLastAction(CCNode::create());
-        log::info("Was performed 3 undo actions in current level editor layer");
         EditorPauseLayer::create(LevelEditorLayer_)->saveLevel();
         log::info("Current level saved");
     }
