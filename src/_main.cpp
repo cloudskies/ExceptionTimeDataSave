@@ -34,7 +34,7 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     log::error("{} with {}", __FUNCTION__, sExcCode);
     //error msg
     if (ExcCode == EXCEPTION_NONCONTINUABLE_EXCEPTION) {
-        CCMessageBox(fmt::format("{}", sExcCode), "EXCEPTION_NONCONTINUABLE_EXCEPTION");
+        MessageBox(0, fmt::format("{}", sExcCode).data(), "EXCEPTION_NONCONTINUABLE_EXCEPTION", 0);
         }
     //save game
     SaveMethods();
