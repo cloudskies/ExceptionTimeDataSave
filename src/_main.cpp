@@ -51,7 +51,8 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-$on_mod(Loaded) {
+#include <Geode/modify/LoadingLayer.hpp>
+class $modify(LoadingLayer) {
     //VectoredExceptionHandler
 	AddVectoredExceptionHandler(1, VectoredExceptionHandler);
     //ConsoleHandler for idk
