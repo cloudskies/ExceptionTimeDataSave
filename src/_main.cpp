@@ -26,41 +26,15 @@ BOOL WINAPI ConsoleHandler(DWORD CEvent) {
     return TRUE;
 }
 
-auto iAlreadyWas = false;
+DWORD LastExcCode;
 
 LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
-    if(iAlreadyWas) {
-        log::error("{}, its me, im already was called so i return EXCEPTION_EXECUTE_HANDLER", __FUNCTION__);
-        return EXCEPTION_EXECUTE_HANDLER;//hl shed
-    }
-    else iAlreadyWas = true;
     //save game
     SaveMethods();
     //error msg
-    DWORD exc_code = pExceptInfo->ExceptionRecord->ExceptionCode;
-    bool dontCare = false;
-    //msg text
-    std::stringstream buffer;
-    buffer << "Was received fatal exception: ";
-    switch (exc_code) {
-    case DBG_PRINTEXCEPTION_WIDE_C:
-        buffer << "DBG_PRINTEXCEPTION_WIDE_C";
-        dontCare = true;
-        break;
-    case DBG_PRINTEXCEPTION_C:
-        buffer << "DBG_PRINTEXCEPTION_C";
-        dontCare = true;
-        break;
-    default:
-        buffer << "0x" << std::hex << exc_code;
-        break;
-    }
-    log::warn("{}", buffer.str());
-    //msg text makeup end
-    if (dontCare) {
-        iAlreadyWas = false;
-        return EXCEPTION_CONTINUE_EXECUTION;//came from 2.2 pc gdps... idk if needs here
-    }
+    DWORD ExcCode = pExceptInfo->ExceptionRecord->ExceptionCode;
+    if (ExcCode == LastExcCode) return EXCEPTION_EXECUTE_HANDLER;
+    else LastExcCode = ExcCode;
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
