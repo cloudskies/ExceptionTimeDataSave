@@ -34,7 +34,7 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     log::error("{} with {}", __FUNCTION__, sExcCode);
     //save game
     SaveMethods();
-    if (ExcCode == 0xc0000005) return EXCEPTION_EXECUTE_HANDLER;//a
+    if (ExcCode == 0xc0000005) return EXCEPTION_EXECUTE_HANDLER;//our bestie
     LastExcCode = ExcCode;
     return EXCEPTION_CONTINUE_SEARCH;
 }
