@@ -3,13 +3,13 @@ using namespace geode::prelude;
 
 void SaveMethods() {
     //save game?
-    AppDelegate::sharedApplication()->trySaveGame();
+    AppDelegate::sharedApplication()->trySaveGame(false);
 	//save log why no
-    log::info("Game saved via trySaveGame()");
+    log::info("{}", "Game saved via trySaveGame()");
     //level editor tries
     if (LevelEditorLayer* LevelEditorLayer_ = GameManager::sharedState()->getEditorLayer()) {
         EditorPauseLayer::create(LevelEditorLayer_)->saveLevel();
-        log::info("Current level saved");
+        log::info("{}", "Current level saved");
     }
 }
 
@@ -30,7 +30,7 @@ auto iAlreadyWas = false;
 
 LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     if(iAlreadyWas) {
-        log::error(__FUNCTION__", its me, im already was called so i return EXCEPTION_EXECUTE_HANDLER");
+        log::error("{}, its me, im already was called so i return EXCEPTION_EXECUTE_HANDLER", __FUNCTION__);
         return EXCEPTION_EXECUTE_HANDLER;//hl shed
     }
     else iAlreadyWas = true;
@@ -55,7 +55,7 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
         buffer << "0x" << std::hex << exc_code;
         break;
     }
-    log::warn(buffer.str());
+    log::warn("{}", buffer.str());
     //msg text makeup end
     if (dontCare) {
         iAlreadyWas = false;
@@ -69,6 +69,6 @@ $on_mod(Loaded) {
 	AddVectoredExceptionHandler(1, VectoredExceptionHandler);
     //ConsoleHandler for idk
     if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler, TRUE) == FALSE) {//c cast???!!((
-        log::error("Can't install console handler!\n");
+        log::error("{}", "Can't install console handler!");
     }
 }
