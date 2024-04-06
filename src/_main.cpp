@@ -35,7 +35,7 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
 
 $on_mod(Loaded) {
     //VectoredExceptionHandler
-	AddVectoredExceptionHandler(1, VectoredExceptionHandler);
+	AddVectoredExceptionHandler(0, VectoredExceptionHandler);
     //ConsoleHandler for idk
     if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler, TRUE) == FALSE) {//c cast???!!((
         log::error("{}", "Can't install console handler!");
