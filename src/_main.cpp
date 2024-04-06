@@ -30,7 +30,7 @@ auto iAlreadyWas = false;
 
 LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     SaveMethods();
-    return EXCEPTION_EXECUTE_HANDLER;
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 
 $on_mod(Loaded) {
