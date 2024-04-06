@@ -33,6 +33,8 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     SaveMethods();
     //error msg
     DWORD ExcCode = pExceptInfo->ExceptionRecord->ExceptionCode;
+    if (ExcCode == EXCEPTION_NONCONTINUABLE_EXCEPTION)
+        CCMessageBox(fmt::format("{}", ExcCode), "EXCEPTION_NONCONTINUABLE_EXCEPTION");
     if (ExcCode != EXCEPTION_NONCONTINUABLE_EXCEPTION) return EXCEPTION_CONTINUE_EXECUTION;
     LastExcCode = ExcCode;
     return EXCEPTION_CONTINUE_SEARCH;
