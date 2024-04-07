@@ -64,4 +64,4 @@ class $modify(LoadingLayer) {
             log::error("{}", "Can't install console handler!");
         }
     };
-}
+};
