@@ -47,16 +47,21 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
 	if (ExcCode == EXCEPTION_INVALID_DISPOSITION) return EXCEPTION_EXECUTE_HANDLER;//=0xc0000026, "
 	if (ExcCode == EXCEPTION_ARRAY_BOUNDS_EXCEEDED) return EXCEPTION_EXECUTE_HANDLER;//=0xc000008c, "
 	if (ExcCode == EXCEPTION_STACK_OVERFLOW) return EXCEPTION_EXECUTE_HANDLER;//=0xc00000fd, "
+	if (ExcCode == LastExcCode) return EXCEPTION_CONTINUE_EXECUTION;//cant find handler so ignore
 	LastExcCode = ExcCode;
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
 #include <Geode/modify/LoadingLayer.hpp>
 class $modify(LoadingLayer) {
-    //VectoredExceptionHandler
-	AddVectoredExceptionHandler(1, VectoredExceptionHandler);
-    //ConsoleHandler for idk
-    if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler, TRUE) == FALSE) {//c cast???!!((
-        log::error("{}", "Can't install console handler!");
-    }
+    void loadingFinished() {
+        LoadingLayer::loadingFinished();
+        //VectoredExceptionHandler
+        AddVectoredExceptionHandler(0, VectoredExceptionHandler);
+        log::debug("{}", "Added vectored exception handler");
+        //ConsoleHandler for idk
+        if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler, TRUE) == FALSE) {//c cast???!!((
+            log::error("{}", "Can't install console handler!");
+        }
+    };
 }
