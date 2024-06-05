@@ -1,11 +1,13 @@
 {
-	"geode": "2.0.0-beta.23",
-	"version": "v3.0.0",
-	"gd": { "win": "2.204"},
+	"geode": "2.0.0-beta.27",
+	"version": "v3.0.1",
+	"gd": { 
+		"win": "2.204"
+	},
 	"id": "user95401.exceptiontimedatasave",
 	"name": "ExceptionTimeDataSave",
 	"developer": "user95401",
-	"description": "exception handler that will save game on crash!!11!!1 yooo",
+	"description": "Exception handler that will save game on crash.",
 	"repository": "https://github.com/user95401/ExceptionTimeDataSave",
 	"early-load": true
 }
