@@ -3,8 +3,12 @@ using namespace geode::prelude;
 
 void SaveMethods() {
     AppDelegate::sharedApplication()->trySaveGame(false);
-    log::info("{}", "Game saved via trySaveGame().");
-    if (LevelEditorLayer* LevelEditorLayer_ = GameManager::sharedState()->getEditorLayer()) {
+    log::info("{}", "Game saved via AppDelegate::trySaveGame().");
+    if (LevelEditorLayer* pLevelEditorLayer = GameManager::sharedState()->getEditorLayer()) {
+        pLevelEditorLayer->m_editorUI->undoLastAction(pLevelEditorLayer->m_editorUI);
+        pLevelEditorLayer->m_editorUI->undoLastAction(pLevelEditorLayer->m_editorUI);
+        pLevelEditorLayer->m_editorUI->undoLastAction(pLevelEditorLayer->m_editorUI);
+        log::info("{}", "Was performed 3 undo actions in current level editor layer.");
         EditorPauseLayer::create(LevelEditorLayer_)->saveLevel();
         log::info("{}", "Current level saved.");
     }
@@ -27,7 +31,7 @@ DWORD LastExcCode;
 LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     DWORD ExcCode = pExceptInfo->ExceptionRecord->ExceptionCode;
     std::string sExcCode = (std::stringstream() << "0x" << std::hex << ExcCode).str();
-    log::error("{} with {}", __FUNCTION__, sExcCode);
+    log::error("{} with {}!", __FUNCTION__, sExcCode);
     SaveMethods();
     if (ExcCode == DBG_CONTROL_C) return EXCEPTION_EXECUTE_HANDLER;
     if (ExcCode == EXCEPTION_DATATYPE_MISALIGNMENT) return EXCEPTION_EXECUTE_HANDLER;
@@ -46,14 +50,10 @@ LONG WINAPI VectoredExceptionHandler(_EXCEPTION_POINTERS* pExceptInfo) {
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-#include <Geode/modify/LoadingLayer.hpp>
-class $modify(LoadingLayer) {
-    void loadingFinished() {
-        LoadingLayer::loadingFinished();
-        AddVectoredExceptionHandler(0, VectoredExceptionHandler);
-        log::debug("{}", "Added VectoredExceptionHandler.");
-        if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler, TRUE) == FALSE) {
-            log::error("{}", "Can't install ConsoleHandler!");
-        }
+$on_mod(Loaded) {
+    AddVectoredExceptionHandler(0, VectoredExceptionHandler);
+    log::debug("{}", "Added VectoredExceptionHandler.");
+    if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleHandler, TRUE) == FALSE) {
+        log::error("{}", "Can't install ConsoleHandler!");
     }
-};
+}
